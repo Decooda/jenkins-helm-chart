@@ -9,10 +9,11 @@ The code is provided as-is with no warranties.
 [Helm](https://helm.sh) must be installed to use the charts.
 Please refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 
-Once Helm is set up properly, add the repo as follows:
+Once Helm is set up properly, you can install by:
 
 ```console
-helm repo add jenkins https://charts.jenkins.io
+cd charts/jenkins
+helm install <flags> jenkins-helm .
 ```
 
 You can then run `helm search repo jenkins` to see the charts.
