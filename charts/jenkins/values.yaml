@@ -84,8 +84,8 @@ controller:
   # being deprecated and replaced by `podSecurityContextOverride`.
   # Set runAsUser to 1000 to let Jenkins run as non-root user 'jenkins' which exists in 'jenkins/jenkins' docker image.
   # When setting runAsUser to a different value than 0 also set fsGroup to the same value:
-  runAsUser: 1000
-  fsGroup: 1000
+  #runAsUser: 2000
+  #fsGroup: 2000
   # If you have PodSecurityPolicies that require dropping of capabilities as suggested by CIS K8s benchmark, put them here
   securityContextCapabilities: {}
   #  drop:
@@ -100,8 +100,8 @@ controller:
   #   runAsNonRoot: true
   #   supplementalGroups: [1000]
   #   # capabilities: {}
-  servicePort: 8080
-  targetPort: 8080
+  servicePort: 8088
+  targetPort: 8088
   # For minikube, set this to NodePort, elsewhere use LoadBalancer
   # Use ClusterIP if your setup includes ingress controller
   serviceType: ClusterIP
@@ -658,10 +658,12 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass:
+  storageClass: efs-sc
+  efsVolumeHandle: fs-78956b7c:/jenkins
+  reclaimPolicy: Retain
   annotations: {}
-  accessMode: "ReadWriteOnce"
-  size: "8Gi"
+  accessMode: "ReadWriteMany"
+  size: "50Gi"
   volumes:
   #  - name: nothing
   #    emptyDir: {}
@@ -711,7 +713,7 @@ serviceAccountAgent:
 backup:
   # Backup must use RBAC
   # So by enabling backup you are enabling RBAC specific for backup
-  enabled: false
+  enabled: true
   # Used for label app.kubernetes.io/component
   componentName: "backup"
   # Schedule to run jobs. Must be in cron time format
@@ -743,10 +745,9 @@ backup:
    # jenkinsgcp:
   ## Use this key for GCP credentials
      # gcpcredentials: credentials.json
-  env: []
-  # Example environment variable required for AWS credentials chain
-  # - name: "AWS_REGION"
-  #   value: "us-east-1"
+  env:
+  - name: "AWS_REGION"
+    value: "us-west-2"
   resources:
     requests:
       memory: 1Gi
@@ -758,7 +759,7 @@ backup:
   # Supported cloud storage services: AWS S3, Minio S3, Azure Blob Storage, Google Cloud Storage
   # Additional support can added. Visit this repository for details
   # Ref: https://github.com/maorfr/skbn
-  destination: "s3://jenkins-data/backup"
+  destination: "s3://jenkins-data/backupplayground"
   # By enabling only the jenkins_home/jobs folder gets backed up, not the whole jenkins instance
   onlyJobs: false
   # Enable backup pod security context (must be `true` if runAsUser or fsGroup are set)
