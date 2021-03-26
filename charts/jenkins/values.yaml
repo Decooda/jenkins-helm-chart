@@ -342,15 +342,20 @@ controller:
     # For Kubernetes v1.19+, use 'networking.k8s.io/v1'
     apiVersion: "extensions/v1beta1"
     labels: {}
-    annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-    # Set this path to jenkinsUriPrefix above or use annotations to rewrite path
-    # path: "/jenkins"
-    # configures the hostname e.g. jenkins.example.com
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+      meta.helm.sh/release-name: dpm-helm
+      meta.helm.sh/release-namespace: develop
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: 1000m
+      nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+      nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
     hostName: jenkins.playground.decooda.com
     tls:
-    - secretName: jenkins-tls
+    - secretName: jenkins-cert-manager-tls
       hosts:
         - jenkins.playground.decooda.com
 
