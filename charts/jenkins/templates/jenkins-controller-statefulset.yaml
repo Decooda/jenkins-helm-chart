@@ -153,7 +153,7 @@ spec:
                   fieldPath: metadata.name
             - name: JAVA_OPTS
               value: >-
-                {{ if .Values.controller.sidecars.configAutoReload.enabled }} -Dcasc.reload.token=$(POD_NAME) {{ end }}{{ default "" .Values.controller.javaOpts }}
+                {{ if .Values.controller.sidecars.configAutoReload.enabled }} -Dcasc.reload.token=$(POD_NAME) {{ end }}{{ default "" .Values.controller.javaOpts }} -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.LAUNCH_DIAGNOSTICS=true
             - name: JENKINS_OPTS
               value: >-
                 {{ if .Values.controller.jenkinsUriPrefix }}--prefix={{ .Values.controller.jenkinsUriPrefix }} {{ end }}{{ default "" .Values.controller.jenkinsOpts}}
